@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Posts{% endblock %}</h1>
+    {% if g.user %}
+        <a class="action" href="{{ url_for('blog.create') }}">New</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% for todo in todos %}
+        <article class="post">
+            <header>
+                <div>
+                    <h1>{{ todo['title'] }}</h1>
+                    <div class="about">by {{ todo['username'] }} on {{ todo['created'].strftime('%Y-%m-%d-%T') }}</div>
+                </div>
+                {% if g.user['id'] == todo['author_id'] %}
+                    <a class="action" href="{{ url_for('blog.update', id=todo['id']) }}">Edit</a>
+                {% endif %}
+            </header>
+            <p class="body">{{ todo['body'] }}</p>
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+    {% for done in dones %}
+        <article class="post">
+            <header>
+                <div>
+                    <h1>{{ done['title'] }}</h1>
+                    <div class="about">by {{ done['username'] }} on {{ done['created'].strftime('%Y-%m-%d-%T') }}</div>
+                </div>
+                {% if g.user['id'] == done['author_id'] %}
+                    <a class="action" href="{{ url_for('blog.update', id=done['id']) }}">Edit</a>
+                {% endif %}
+            </header>
+            <p class="body">{{ done['body'] }}</p>
+        </article>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
